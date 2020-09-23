@@ -40,8 +40,8 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int =
-    if (year % 400 != 0 && year % 4 == 0 && month == 2) 28
-    else if (month == 2) 29
+    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) 29
+    else if (month == 2) 28
     else if ((month <= 7 && month % 2 == 1) || (month > 7 && month % 2 == 0)) 31
     else 30
 
@@ -56,7 +56,7 @@ fun daysInMonth(month: Int, year: Int): Int =
 fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
-): Boolean = TODO()
+): Boolean = sqrt(sqrt(x1 - x2) + sqrt(y1 - y2)) + r1 <= r2
 
 /**
  * Средняя (3 балла)
@@ -67,4 +67,7 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = TODO()
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
+    (r >= a && s >= b || r >= b && s >= a)
+            || (r >= a && s >= c || r >= c && s >= a)
+            || (r >= c && s >= b || r >= b && s >= c)
