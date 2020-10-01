@@ -69,8 +69,9 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String = when {
-    age % 10 <= 4 && age % 10 >= 2 && age % 100 / 10 != 1 -> "$age года"
-    age % 10 == 1 && age % 100 / 10 != 1 -> "$age год"
+    age % 100 / 10 == 1 -> "$age лет"
+    age % 10 in 2..4 -> "$age года"
+    age % 10 == 1 -> "$age год"
     else -> "$age лет"
 }
 
@@ -87,9 +88,11 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double {
     val halfWay = (t1 * v1 + t2 * v2 + t3 * v3) / 2
-    if (halfWay <= t1 * v1) return halfWay / v1
-    else if (halfWay <= v1 * t1 + v2 * t2) return t1 + (halfWay - t1 * v1) / v2
-    else return t1 + t2 + (halfWay - t1 * v1 - t2 * v2) / v3
+    return when {
+        halfWay <= t1 * v1 -> halfWay / v1
+        halfWay <= v1 * t1 + v2 * t2 -> t1 + (halfWay - t1 * v1) / v2
+        else -> t1 + t2 + (halfWay - t1 * v1 - t2 * v2) / v3
+    }
 }
 
 /**
@@ -141,18 +144,16 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int =
-    if (a + b <= c || b + c <= a || a + c <= b) -1
-    else if (a.pow(2) + b.pow(2) < c.pow(2) || c.pow(2) + b.pow(2) < a.pow(2)
-        || a.pow(2) + c.pow(2) < b.pow(2)
-    ) 2
-    else if (a.pow(2) + b.pow(2) == c.pow(2) || c.pow(2) + b.pow(2) == a.pow(2)
-        || a.pow(2) + c.pow(2) == b.pow(2)
-    ) 1
-    else if (a.pow(2) + b.pow(2) > c.pow(2) || c.pow(2) + b.pow(2) > a.pow(2)
-        || a.pow(2) + c.pow(2) > b.pow(2)
-    ) 0
-    else -1
+fun triangleKind(a: Double, b: Double, c: Double): Int = when {
+    a + b <= c || b + c <= a || a + c <= b -> -1
+    a.pow(2) + b.pow(2) < c.pow(2) || c.pow(2) + b.pow(2) < a.pow(2)
+            || a.pow(2) + c.pow(2) < b.pow(2) -> 2
+    a.pow(2) + b.pow(2) == c.pow(2) || c.pow(2) + b.pow(2) == a.pow(2)
+            || a.pow(2) + c.pow(2) == b.pow(2) -> 1
+    a.pow(2) + b.pow(2) > c.pow(2) || c.pow(2) + b.pow(2) > a.pow(2)
+            || a.pow(2) + c.pow(2) > b.pow(2) -> 0
+    else -> -1
+}
 
 /**
  * Средняя (3 балла)
@@ -162,13 +163,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int =
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    if (b >= c && b <= d) {
-        if (a >= c) return b - a
-        else return b - c
-    }
-    if (d >= a && d <= b) {
-        if (c >= a) return d - c
-        else return d - a
-    } else return -1
-}
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int =
+    if (b in c..d)
+        if (a >= c) b - a
+        else b - c
+    else if (d in a..b) {
+        if (c >= a) d - c
+        else d - a
+    } else -1
