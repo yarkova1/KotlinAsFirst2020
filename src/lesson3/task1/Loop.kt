@@ -2,8 +2,7 @@
 
 package lesson3.task1
 
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -74,7 +73,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var num = n
+    var num = abs(n)
     return if (num < 10) 1
     else {
         var countOfNumbers = 0
@@ -148,12 +147,12 @@ fun maxDivisor(n: Int): Int = n / minDivisor(n)
  * этого для какого-либо начального X > 0.
  */
 fun collatzSteps(x: Int): Int {
-    var X = x
+    var xx = x
     var counter = 0
-    while (X != 1) {
+    while (xx != 1) {
         counter++
-        if (X % 2 == 0) X /= 2
-        else X = 3 * X + 1
+        if (xx % 2 == 0) xx /= 2
+        else xx = 3 * xx + 1
     }
     return counter
 }
@@ -182,13 +181,13 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var M = m
-    var N = n
-    while (M != N) {
-        if (M > N) M -= N
-        else N -= M
+    var mm = m
+    var nn = n
+    while (mm != nn) {
+        if (mm > nn) mm -= nn
+        else nn -= mm
     }
-    return M <= 1
+    return mm <= 1
 }
 
 /**
@@ -212,11 +211,11 @@ fun squareBetweenExists(m: Int, n: Int): Boolean =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var N = n
+    var nn = n
     var num = 0
-    while (N > 0) {
-        num = num * 10 + N % 10
-        N /= 10
+    while (nn > 0) {
+        num = num * 10 + nn % 10
+        nn /= 10
     }
     return num
 }
@@ -231,11 +230,11 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean {
-    var N = n
+    var nn = n
     var num = 0
-    while (N > 0) {
-        num = num * 10 + N % 10
-        N /= 10
+    while (nn > 0) {
+        num = num * 10 + nn % 10
+        nn /= 10
     }
     return num == n
 }
@@ -250,19 +249,15 @@ fun isPalindrome(n: Int): Boolean {
  */
 fun hasDifferentDigits(n: Int): Boolean {
     if (n < 10) return false
-    else {
-        val answer = mutableListOf<Int>()
-        var N = n
-        while (N > 0) {
-            answer[N % 10]++
-            N /= 10
-        }
-        var q = 0
-        for (i in 0..9) {
-            if (answer[i] > 1) q++
-        }
-        return q == 0
+    val answer = MutableList(10) {0}
+    var nn = n
+    var counter = 0
+    while (nn > 0) {
+        answer[nn % 10]++
+        nn /= 10
+        counter++
     }
+    return answer[n % 10] != counter
 }
 
 /**
