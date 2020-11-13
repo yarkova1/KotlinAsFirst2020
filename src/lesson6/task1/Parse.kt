@@ -204,9 +204,10 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int {
+fun fromRoman(roman: String): Int? {
     val n = roman.length
     val b = MutableList(n) { 0 }
+    if (roman == "") return null
     for (i in 0 until n) {
         if (roman[i] != 'I' && roman[i] != 'V' && roman[i] != 'X' && roman[i] != 'L' && roman[i] != 'C' &&
             roman[i] != 'D' && roman[i] != 'M'
