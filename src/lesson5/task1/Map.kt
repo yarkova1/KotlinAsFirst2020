@@ -96,7 +96,14 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    val rez = mutableMapOf<Int, MutableList<String>>()
+    for ((key, value) in grades) {
+        if (rez[value] != null) rez[value]?.add(key)
+        else rez[value] = mutableListOf(key)
+    }
+    return rez
+}
 
 /**
  * Простая (2 балла)
@@ -109,7 +116,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    a.forEach { (first, second) ->
+    for ((first, second) in a) {
         if (second != b[first]) return false
     }
     return true
@@ -215,7 +222,11 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val res = mutableMapOf<String, Int>()
+    for (index in list) res[index] = res.getOrDefault(index, 0) + 1
+    return res.filterValues { it != 1 }
+}
 
 /**
  * Средняя (3 балла)
