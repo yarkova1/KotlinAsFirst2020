@@ -285,7 +285,13 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(N: Int): String = TODO()
+fun roman(N: Int): String {
+    val one = listOf("", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")
+    val tens = listOf("", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC")
+    val hundred = listOf("", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM")
+    val thousand = listOf("", "M", "MM", "MMM", "MMMM")
+    return thousand[N / 1000] + hundred[N / 100 % 10] + tens[N / 10 % 10] + one[N % 10]
+}
 
 
 /**
@@ -295,4 +301,84 @@ fun roman(N: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val res = mutableListOf<String>()
+    val hundred = listOf(
+        "",
+        "сто",
+        "двести",
+        "триста",
+        "четыреста",
+        "пятьсот",
+        "шестьсот",
+        "семьсот",
+        "восемьсот",
+        "девятьсот"
+    )
+    val decade = listOf(
+        "",
+        "",
+        "двадцать",
+        "тридцать",
+        "сорок",
+        "пятьдесят",
+        "шестьдесят",
+        "семьдесят",
+        "восемьдесят",
+        "девяносто"
+    )
+    val tens = listOf(
+        "десять",
+        "одиннадцать",
+        "двенадцать",
+        "тринадцать",
+        "четырнадцать",
+        "пятнадцать",
+        "шестнадцать",
+        "семнадцать",
+        "восемнадцать",
+        "девятнадцать"
+    )
+    val ten = listOf(
+        "",
+        "один",
+        "два",
+        "три",
+        "четыре",
+        "пять",
+        "шесть",
+        "семь",
+        "восемь",
+        "девять"
+    )
+    val left = n / 1000
+    val right = n % 1000
+    fun hun(n: Int): String = hundred[n / 100]
+
+    fun dec(n: Int): String {
+        return if (n / 10 == 1) tens[n % 10]
+        else decade[n / 10]
+    }
+    if (left > 0) {
+        res.add(hun(left))
+        if (left % 100 / 10 != 0) res.add(dec(left % 100))
+        if (left % 100 / 10 != 1 && left % 10 != 0) when {
+            left % 10 == 1 -> res.add("одна")
+            left % 10 == 2 -> res.add("две")
+            else -> res.add(ten[left % 10])
+        }
+        when {
+            left % 100 / 10 != 1 && left % 10 == 1 -> res.add("тысяча")
+            left % 100 / 10 != 1 && (left % 10 == 2 || left % 10 == 3 || left % 10 == 4) -> res.add("тысячи")
+            else -> res.add("тысяч")
+        }
+    }
+    if (right > 0) {
+        res.add(hun(right))
+        res.add(dec(right % 100))
+        if (right % 100 / 10 != 1 && right % 10 != 0) res.add(ten[right % 10])
+    }
+    val list = res.filter { element -> element.isNotEmpty() }
+    val rez = list.joinToString(" ")
+    return rez
+}

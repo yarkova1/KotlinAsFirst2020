@@ -296,27 +296,18 @@ fun squareSequenceDigit(n: Int): Int {
     var num = 0
     var square = 0
     var c = 1
-    var k = 10
     while (counter < n) {
         num++
         square = num * num
-        c = 1
-        k = 10
-        while (square / k != 0) {
-            k *= 10
-            c++
-        }
-        counter += c
+        counter += digitNumber(square)
     }
-    counter -= c
-    k /= 10
-    var result = 1
-    while (counter != n) {
-        result = square / k % 10
-        k /= 10
-        counter++
+    var result = square
+    while (counter >= n) {
+        c = result % 10
+        result /= 10
+        counter--
     }
-    return result
+    return c
 }
 
 /**

@@ -138,7 +138,18 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    if (!Regex("""\d+(\s+[+-]\s+\d+)*""").matches(expression)) throw IllegalArgumentException()
+    val parts = expression.split(" ")
+    val size = parts.size - 1
+    var rez = parts[0].toInt()
+    for (i in 1 until size step 2) {
+        if (parts[i] == "+") rez += parts[i + 1].toInt()
+        else rez -= parts[i + 1].toInt()
+    }
+    return rez
+
+}
 
 /**
  * Сложная (6 баллов)
@@ -162,7 +173,25 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше нуля либо равны нулю.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val parts = description.split(" ", "; ")
+    var index = 0
+    var max = -1.0
+    var i = -1
+    for (element in parts) {
+        i++
+        if (i % 2 != 0) {
+            val num = element.toDouble()
+            if (num < 0.0) return ""
+            if (num > max) {
+                max = num
+                index = i
+            }
+        }
+    }
+    return if (index != 0) parts[index - 1]
+    else ""
+}
 
 /**
  * Сложная (6 баллов)
@@ -175,7 +204,30 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    val n = roman.length
+    val b = MutableList(n) { 0 }
+    for (i in 0 until n) {
+        if (roman[i] != 'I' && roman[i] != 'V' && roman[i] != 'X' && roman[i] != 'L' && roman[i] != 'C' &&
+            roman[i] != 'D' && roman[i] != 'M'
+        ) return -1
+        when {
+            roman[i] == 'I' -> b[i] = 1
+            roman[i] == 'V' -> b[i] = 5
+            roman[i] == 'X' -> b[i] = 10
+            roman[i] == 'L' -> b[i] = 50
+            roman[i] == 'C' -> b[i] = 100
+            roman[i] == 'D' -> b[i] = 500
+            roman[i] == 'M' -> b[i] = 1000
+        }
+    }
+    var s = b[0]
+    for (i in 1 until n) {
+        s += b[i]
+        if (b[i] > b[i - 1]) s -= 2 * b[i - 1]
+    }
+    return s
+}
 
 /**
  * Очень сложная (7 баллов)
