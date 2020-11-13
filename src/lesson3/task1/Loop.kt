@@ -249,7 +249,7 @@ fun isPalindrome(n: Int): Boolean {
  */
 fun hasDifferentDigits(n: Int): Boolean {
     if (n < 10) return false
-    val answer = MutableList(10) {0}
+    val answer = MutableList(10) { 0 }
     var nn = n
     var counter = 0
     while (nn > 0) {
@@ -319,4 +319,23 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+
+
+fun fibSequenceDigit(n: Int): Int {
+    var counter = 0
+    var num = 0
+    var f = 0
+    var c = 1
+    while (counter < n) {
+        num++
+        f = fib(num)
+        counter += digitNumber(f)
+    }
+    var result = f
+    while (counter >= n) {
+        c = result % 10
+        result /= 10
+        counter--
+    }
+    return c
+}
