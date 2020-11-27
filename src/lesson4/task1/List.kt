@@ -355,10 +355,8 @@ fun russian(n: Int): String {
     val right = n % 1000
     fun hun(n: Int): String = hundred[n / 100]
 
-    fun dec(n: Int): String {
-        return if (n / 10 == 1) tens[n % 10]
-        else decade[n / 10]
-    }
+    fun dec(n: Int): String = if (n / 10 == 1) tens[n % 10]
+    else decade[n / 10]
     if (left > 0) {
         res.add(hun(left))
         if (left % 100 / 10 != 0) res.add(dec(left % 100))
@@ -379,6 +377,5 @@ fun russian(n: Int): String {
         if (right % 100 / 10 != 1 && right % 10 != 0) res.add(ten[right % 10])
     }
     val list = res.filter { element -> element.isNotEmpty() }
-    val rez = list.joinToString(" ")
-    return rez
+    return list.joinToString(" ")
 }

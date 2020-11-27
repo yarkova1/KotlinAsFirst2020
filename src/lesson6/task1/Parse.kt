@@ -139,7 +139,7 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (!Regex("""\d+(\s+[+-]\s+\d+)*""").matches(expression)) throw IllegalArgumentException()
+    if (!Regex("""\d+(\s+[+-]\s+\d+)*""").matches(expression)) throw IllegalArgumentException("Illegal format")
     val parts = expression.split(" ")
     val size = parts.size - 1
     var rez = parts[0].toInt()
@@ -175,21 +175,19 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  */
 fun mostExpensive(description: String): String {
     val parts = description.split(" ", "; ")
-    var index = 0
+    var i = 0
     var max = -1.0
-    var i = -1
-    for (element in parts) {
-        i++
-        if (i % 2 != 0) {
-            val num = element.toDouble()
+    for ((index, value) in parts.withIndex()) {
+        if (index % 2 != 0) {
+            val num = value.toDouble()
             if (num < 0.0) return ""
             if (num > max) {
                 max = num
-                index = i
+                i = index
             }
         }
     }
-    return if (index != 0) parts[index - 1]
+    return if (i != 0) parts[i - 1]
     else ""
 }
 
@@ -207,19 +205,19 @@ fun mostExpensive(description: String): String {
 fun fromRoman(roman: String): Int? {
     val n = roman.length
     val b = MutableList(n) { 0 }
-    if (roman == "") return -1
+    if (roman.isEmpty() || Regex("""\s*""").matches(roman)) return -1
+    val rom = listOf('I', 'V', 'X', 'L', 'C', 'D', 'M')
     for (i in 0 until n) {
-        if (roman[i] != 'I' && roman[i] != 'V' && roman[i] != 'X' && roman[i] != 'L' && roman[i] != 'C' &&
-            roman[i] != 'D' && roman[i] != 'M'
-        ) return -1
-        when {
-            roman[i] == 'I' -> b[i] = 1
-            roman[i] == 'V' -> b[i] = 5
-            roman[i] == 'X' -> b[i] = 10
-            roman[i] == 'L' -> b[i] = 50
-            roman[i] == 'C' -> b[i] = 100
-            roman[i] == 'D' -> b[i] = 500
-            roman[i] == 'M' -> b[i] = 1000
+        if (roman[i] !in rom) return -1
+        when (roman[i]) {
+            'I' -> b[i] = 1
+            'V' -> b[i] = 5
+            'X' -> b[i] = 10
+            'L' -> b[i] = 50
+            'C' -> b[i] = 100
+            'D' -> b[i] = 500
+            'M' -> b[i] = 1000
+            else -> return -1
         }
     }
     var s = b[0]

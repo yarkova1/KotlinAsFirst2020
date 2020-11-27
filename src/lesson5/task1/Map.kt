@@ -99,8 +99,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val rez = mutableMapOf<Int, MutableList<String>>()
     for ((key, value) in grades) {
-        if (rez[value] != null) rez[value]?.add(key)
-        else rez[value] = mutableListOf(key)
+        rez.getOrPut(value) { mutableListOf() }.add(key)
     }
     return rez
 }
@@ -224,7 +223,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
-    for (index in list) res[index] = res.getOrDefault(index, 0) + 1
+    for (index in list) res[index] = (res[index] ?: 0) + 1
     return res.filterValues { it != 1 }
 }
 

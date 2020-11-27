@@ -66,7 +66,7 @@ fun deleteMarked(inputName: String, outputName: String) {
     val writer = File(inputName).bufferedReader()
     val str = File(outputName).bufferedWriter()
     for (element in writer.readLines()) {
-        if (element.isEmpty() || element[0] != '_') {
+        if (element.isEmpty() || !element.startsWith('_')) {
             str.write(element)
             str.newLine()
         }
@@ -130,7 +130,7 @@ fun centerFile(inputName: String, outputName: String) {
     }
     for (line in str) {
         if (line.length < lineMax) {
-            for (i in 0 until (lineMax - line.trim().length) / 2) writer.write(" ")
+            writer.write(" ".repeat((lineMax - line.trim().length) / 2))
         }
         writer.write(line.trim())
         writer.newLine()
