@@ -179,7 +179,7 @@ fun mostExpensive(description: String): String {
     var max = -1.0
     for ((index, value) in parts.withIndex()) {
         if (index % 2 != 0) {
-            val num = value.toDouble()
+            val num = value.toDoubleOrNull() ?: return ""
             if (num < 0.0) return ""
             if (num > max) {
                 max = num
