@@ -292,7 +292,7 @@ fun roman(N: Int): String {
     var n = N
     while (n > 0)
         for (i in 12 downTo 0)
-            if (n - arab[i] >= 0) {
+            if (n >= arab[i]) {
                 n -= arab[i]
                 rez += rom[i]
                 break
