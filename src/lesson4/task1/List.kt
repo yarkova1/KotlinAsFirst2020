@@ -286,11 +286,19 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(N: Int): String {
-    val one = listOf("", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")
-    val tens = listOf("", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC")
-    val hundred = listOf("", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM")
-    val thousand = listOf("", "M", "MM", "MMM", "MMMM")
-    return thousand[N / 1000] + hundred[N / 100 % 10] + tens[N / 10 % 10] + one[N % 10]
+    val arab = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    val rom = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    var rez = ""
+    var n = N
+    while (n > 0)
+        for (i in 12 downTo 0)
+            if (n - arab[i] >= 0) {
+                n -= arab[i]
+                rez += rom[i]
+                break
+            }
+    return rez
+
 }
 
 
