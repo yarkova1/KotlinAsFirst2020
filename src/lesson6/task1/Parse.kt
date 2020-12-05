@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import kotlin.collections.getValue as getValue1
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -206,19 +208,10 @@ fun fromRoman(roman: String): Int? {
     val n = roman.length
     val b = MutableList(n) { 0 }
     if (roman.isEmpty() || Regex("""\s*""").matches(roman)) return -1
-    val rom = listOf('I', 'V', 'X', 'L', 'C', 'D', 'M')
+    val rom = mapOf('I' to 1, 'V' to 5, 'X' to 10, 'L' to 50, 'C' to 100, 'D' to 500, 'M' to 1000)
     for (i in 0 until n) {
-        if (roman[i] !in rom) return -1
-        when (roman[i]) {
-            'I' -> b[i] = 1
-            'V' -> b[i] = 5
-            'X' -> b[i] = 10
-            'L' -> b[i] = 50
-            'C' -> b[i] = 100
-            'D' -> b[i] = 500
-            'M' -> b[i] = 1000
-            else -> return -1
-        }
+        if (!rom.containsKey(roman[i])) return -1
+        b[i] = rom.getValue1(roman[i])
     }
     var s = b[0]
     for (i in 1 until n) {
