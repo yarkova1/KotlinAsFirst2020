@@ -2,7 +2,6 @@
 
 package lesson6.task1
 
-import kotlin.collections.getValue as getValue1
 
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
@@ -210,8 +209,7 @@ fun fromRoman(roman: String): Int? {
     if (roman.isEmpty() || Regex("""\s*""").matches(roman)) return -1
     val rom = mapOf('I' to 1, 'V' to 5, 'X' to 10, 'L' to 50, 'C' to 100, 'D' to 500, 'M' to 1000)
     for (i in 0 until n) {
-        if (!rom.containsKey(roman[i])) return -1
-        b[i] = rom.getValue1(roman[i])
+        b[i] = rom[roman[i]] ?: return -1
     }
     var s = b[0]
     for (i in 1 until n) {
