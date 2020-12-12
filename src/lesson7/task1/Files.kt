@@ -355,7 +355,68 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val output = File(outputName).bufferedWriter()
+    val lines = File(inputName).readLines()
+    val line = StringBuilder()
+    line.append("<html><body><p>")
+    var countDash = 0
+    var countStars = 0
+    var doubleStars = 0
+    var openP = 1
+    for (k in lines.indices) {
+        if (k != 0 && lines[k].isEmpty() && lines[k - 1].isNotEmpty() && openP == 1) {
+            line.append("</p>")
+            openP = 0
+        } else {
+            var l = 0
+            while (lines[k].length > l) {
+                if (openP == 0) {
+                    line.append("<p>")
+                    openP = 1
+                }
+                if (lines[k][l] == '~' && l + 1 < lines[k].length && lines[k][l + 1] == '~')
+                    when (countDash) {
+                        0 -> {
+                            line.append("<s>")
+                            countDash++
+                        }
+                        1 -> {
+                            line.append("</s>")
+                            countDash--
+                        }
+                    }
+                if (lines[k][l] == '*')
+                    if (l + 1 < lines[k].length && lines[k][l + 1] == '*') {
+                        l += 1
+                        when (doubleStars) {
+                            0 -> {
+                                doubleStars++
+                                line.append("<b>")
+                            }
+                            1 -> {
+                                doubleStars--
+                                line.append("</b>")
+                            }
+                        }
+                    } else
+                        when (countStars) {
+                            0 -> {
+                                countStars++
+                                line.append("<i>")
+                            }
+                            1 -> {
+                                countStars--
+                                line.append("</i>")
+                            }
+                        }
+                if (lines[k][l] != '~' && lines[k][l] != '*') line.append(lines[k][l])
+                l++
+            }
+        }
+    }
+    if (openP == 1) line.append("</p>")
+    output.write(line.append("</body></html>").toString())
+    output.close()
 }
 
 /**
