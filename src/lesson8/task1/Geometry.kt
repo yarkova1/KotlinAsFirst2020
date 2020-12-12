@@ -107,20 +107,22 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment {
+fun diameter(vararg points: Point): Segment = TODO()
+/**{
     if (points.size < 2) throw IllegalArgumentException()
     var max = 0.0
     var a = points[0]
     var b = points[1]
     for (i in 0..points.size - 2)
         for (j in i + 1 until points.size)
-            if (points[i].distance(points[j]) > max) {
-                a = points[i]
+ *            if (points[i].distance(points[j]) > max) {
+ *                a = points[i]
                 b = points[i + 1]
-                max = points[i].distance(points[i + 1])
+ *               max = points[i].distance(points[i + 1])
             }
     return Segment(a, b)
 }
+ */
 
 /**
  * Простая (2 балла)
@@ -211,7 +213,9 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> = TODO()
  * (построить окружность по трём точкам, или
  * построить окружность, описанную вокруг треугольника - эквивалентная задача).
  */
-fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
+fun circleByThreePoints(a: Point, b: Point, c: Point): Circle = TODO()
+
+/**{
     val oO = Point(0.0, 0.0)
     val first = a.x * (b.y - c.y) - a.y * (b.x - c.x) + b.x * c.y - c.x * b.y
     val second = a.distance(oO).pow(2) * (c.y - b.y) + b.distance(oO).pow(2) * (a.y - c.y) +
@@ -221,7 +225,7 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
     return Circle(Point(-third / (2 * first), -second / (2 * first)),
         Point(-third / (2 * first), -second / (2 * first)).distance(b))
 }
-
+ */
 /**
  * Очень сложная (10 баллов)
  *
