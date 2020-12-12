@@ -121,6 +121,7 @@ fun diameter(vararg points: Point): Segment {
             }
     return Segment(a, b)
 }
+
 /**
  * Простая (2 балла)
  *
@@ -173,14 +174,19 @@ fun lineBySegment(s: Segment): Line = TODO()
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = TODO()
+fun lineByPoints(a: Point, b: Point): Line = if (atan2(b.y - a.y, b.x - a.x) > 0)
+    Line(a, atan2(b.y - a.y, b.x - a.x) % PI)
+else Line(a, (PI - abs(atan2(b.y - a.y, b.x - a.x))) % PI)
 
 /**
  * Сложная (5 баллов)
  *
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
-fun bisectorByPoints(a: Point, b: Point): Line = TODO()
+fun bisectorByPoints(a: Point, b: Point): Line {
+    val line = lineByPoints(a, b)
+    return Line(Point((a.x + b.x) / 2, (a.y + b.y) / 2), (PI / 2 + line.angle) % PI)
+}
 
 /**
  * Средняя (3 балла)
@@ -205,7 +211,16 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> = TODO()
  * (построить окружность по трём точкам, или
  * построить окружность, описанную вокруг треугольника - эквивалентная задача).
  */
-fun circleByThreePoints(a: Point, b: Point, c: Point): Circle = TODO()
+fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
+    val oO = Point(0.0, 0.0)
+    val first = a.x * (b.y - c.y) - a.y * (b.x - c.x) + b.x * c.y - c.x * b.y
+    val second = a.distance(oO).pow(2) * (c.y - b.y) + b.distance(oO).pow(2) * (a.y - c.y) +
+            c.distance(oO).pow(2) * (b.y - a.y)
+    val third = a.distance(oO).pow(2) * (b.x - c.x) + b.distance(oO).pow(2) * (c.x - a.x) +
+            c.distance(oO).pow(2) * (a.x - b.x)
+    return Circle(Point(-third / (2 * first), -second / (2 * first)),
+        Point(-third / (2 * first), -second / (2 * first)).distance(b))
+}
 
 /**
  * Очень сложная (10 баллов)
