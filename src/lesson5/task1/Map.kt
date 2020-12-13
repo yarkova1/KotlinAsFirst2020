@@ -322,23 +322,25 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+/**{
     var maxPrice = 0
     val ourItems = mutableMapOf<Int, List<String>>()
     fun myFun(leftTreasures: List<String>, price: Int, ourCapacity: Int) {
         val rightCap = mutableMapOf<Int, Int>()
-        if (ourCapacity in rightCap && rightCap[ourCapacity]!! >= price) return
+*        if (ourCapacity in rightCap && rightCap[ourCapacity]!! >= price) return
         else {
-            ourItems[price] = leftTreasures
-            rightCap[ourCapacity] = price
+*            ourItems[price] = leftTreasures
+*            rightCap[ourCapacity] = price
             if (price > maxPrice) maxPrice = price
         }
         for (item in leftTreasures)
-            if ((ourCapacity >= (treasures[item]?.first!!)))
+ *           if ((ourCapacity >= (treasures[item]?.first!!)))
                 myFun(leftTreasures - item,
-                    price + (treasures[item]?.second!!),
-                    ourCapacity - (treasures[item]?.first!!))
+*                    price + (treasures[item]?.second!!),
+*                    ourCapacity - (treasures[item]?.first!!))
     }
     myFun(treasures.keys.toList(), 0, capacity)
-    return treasures.keys - (ourItems[maxPrice]?.toSet()!!)
+*    return treasures.keys - (ourItems[maxPrice]?.toSet()!!)
 }
+ */

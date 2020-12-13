@@ -166,40 +166,33 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    val output = File(outputName).bufferedWriter()
-    val res = mutableListOf<String>()
+    val res = mutableListOf<List<String>>()
     var lineMax = 0
     for (line in File(inputName).readLines()) {
-        var str = ""
-        for (element in line.trim().split(" "))
-            if (element.isNotEmpty())
-                str += "$element "
-        res.add(str.trim())
-        if (lineMax <= str.length - 1) lineMax = str.length - 1
+        val str = line.trim().split(Regex("""\s+"""))
+        res.add(str)
+        val len = str.joinToString(" ").length
+        if (lineMax <= len) lineMax = len
     }
-    for (i in res) {
-        val c = i.split(" ")
-        var str = ""
-        if (c.size == 1 || lineMax == i.length) output.write(i)
-        else {
-            val k = c.size - 1
-            val n = lineMax - i.length + k
-            val a = n / k
-            if (a * k == n)
-                for (element in c) {
-                    str += element
-                    (0 until a).forEach { _ -> str += " " }
+    File(outputName).bufferedWriter().use {
+        for (i in res) {
+            var st = i.joinToString(" ")
+            val len = st.length
+            if (i.size == 1 || lineMax == len) it.write(st)
+            else {
+                val k = i.size - 1
+                val n = lineMax - st.length + k
+                val a = n / k
+                for (element in i.indices) {
+                    st += i[element]
+                    st += " ".repeat(a - 1)
+                    if (element < n - a * k) st += " "
                 }
-            else for (element in c.indices) {
-                str += c[element]
-                (0 until a).forEach { _ -> str += " " }
-                if (element < n - a * k) str += " "
             }
+            it.write(st)
+            it.newLine()
         }
-        output.write(str.trim())
-        output.newLine()
     }
-    output.close()
 }
 
 /**
@@ -355,68 +348,68 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val output = File(outputName).bufferedWriter()
-    val lines = File(inputName).readLines()
-    val line = StringBuilder()
-    line.append("<html><body><p>")
-    var countDash = 0
-    var countStars = 0
-    var doubleStars = 0
-    var openP = 1
-    for (k in lines.indices) {
-        if (k != 0 && lines[k].isEmpty() && lines[k - 1].isNotEmpty() && openP == 1) {
-            line.append("</p>")
-            openP = 0
-        } else {
-            var l = 0
-            while (lines[k].length > l) {
-                if (openP == 0) {
-                    line.append("<p>")
-                    openP = 1
-                }
-                if (lines[k][l] == '~' && l + 1 < lines[k].length && lines[k][l + 1] == '~')
-                    when (countDash) {
-                        0 -> {
-                            line.append("<s>")
-                            countDash++
-                        }
-                        1 -> {
-                            line.append("</s>")
-                            countDash--
-                        }
+    File(outputName).bufferedWriter().use {
+        val lines = File(inputName).readLines()
+        val line = StringBuilder()
+        line.append("<html><body><p>")
+        var countDash = false
+        var countStars = false
+        var doubleStars = false
+        var openP = 1
+        for (k in lines.indices) {
+            if (k != 0 && lines[k].isEmpty() && lines[k - 1].isNotEmpty() && openP == 1) {
+                line.append("</p>")
+                openP = 0
+            } else {
+                var i = 0
+                while (lines[k].length > i) {
+                    if (openP == 0) {
+                        line.append("<p>")
+                        openP = 1
                     }
-                if (lines[k][l] == '*')
-                    if (l + 1 < lines[k].length && lines[k][l + 1] == '*') {
-                        l += 1
-                        when (doubleStars) {
-                            0 -> {
-                                doubleStars++
-                                line.append("<b>")
+                    if (lines[k][i] == '~' && i + 1 < lines[k].length && lines[k][i + 1] == '~')
+                        when (countDash) {
+                            false -> {
+                                line.append("<s>")
+                                countDash = true
                             }
-                            1 -> {
-                                doubleStars--
-                                line.append("</b>")
+                            true -> {
+                                line.append("</s>")
+                                countDash = false
                             }
                         }
-                    } else
-                        when (countStars) {
-                            0 -> {
-                                countStars++
-                                line.append("<i>")
+                    else if (lines[k][i] == '*')
+                        if (i + 1 < lines[k].length && lines[k][i + 1] == '*') {
+                            i += 1
+                            when (doubleStars) {
+                                false -> {
+                                    doubleStars = true
+                                    line.append("<b>")
+                                }
+                                true -> {
+                                    doubleStars = false
+                                    line.append("</b>")
+                                }
                             }
-                            1 -> {
-                                countStars--
-                                line.append("</i>")
+                        } else
+                            when (countStars) {
+                                false -> {
+                                    countStars = true
+                                    line.append("<i>")
+                                }
+                                true -> {
+                                    countStars = false
+                                    line.append("</i>")
+                                }
                             }
-                        }
-                if (lines[k][l] != '~' && lines[k][l] != '*') line.append(lines[k][l])
-                l++
+                    if (lines[k][i] != '~' && lines[k][i] != '*') line.append(lines[k][i])
+                    i++
+                }
             }
         }
+        if (openP == 1) line.append("</p>")
+        it.write(line.append("</body></html>").toString())
     }
-    if (openP == 1) line.append("</p>")
-    output.write(line.append("</body></html>").toString())
-    output.close()
 }
 
 /**

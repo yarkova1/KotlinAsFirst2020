@@ -79,8 +79,11 @@ data class Circle(val center: Point, val radius: Double) {
      * расстояние между их центрами минус сумма их радиусов.
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
-    fun distance(other: Circle): Double = if (other.center.distance(center) - (radius + other.radius) < 0) 0.0
-    else other.center.distance(center) - (radius + other.radius)
+    fun distance(other: Circle): Double {
+        val d = other.center.distance(center) - (radius + other.radius)
+        return if (d < 0) 0.0
+        else d
+    }
 
     /**
      * Тривиальная (1 балл)
@@ -176,9 +179,7 @@ fun lineBySegment(s: Segment): Line = TODO()
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = if (atan2(b.y - a.y, b.x - a.x) > 0)
-    Line(a, atan2(b.y - a.y, b.x - a.x) % PI)
-else Line(a, (PI - abs(atan2(b.y - a.y, b.x - a.x))) % PI)
+fun lineByPoints(a: Point, b: Point): Line = Line(a, atan2(b.y - a.y, b.x - a.x) % PI)
 
 /**
  * Сложная (5 баллов)
