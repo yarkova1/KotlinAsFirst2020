@@ -183,17 +183,21 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                 val k = i.size - 1
                 val n = lineMax - st.length + k
                 val a = n / k
-                for (element in i.indices) {
-                    st += i[element]
-                    st += " ".repeat(a - 1)
-                    if (element < n - a * k) st += " "
+                st = buildString {
+                    for (element in 0 until k) {
+                        append(i[element], " ".repeat(a))
+                        if (element < n - a * k) append(" ")
+                    }
+                    append(i[k])
                 }
+                it.write(st)
             }
-            it.write(st)
             it.newLine()
         }
     }
 }
+
+
 
 /**
  * Средняя (14 баллов)
