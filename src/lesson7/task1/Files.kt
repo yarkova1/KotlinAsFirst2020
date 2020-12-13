@@ -199,7 +199,6 @@ fun alignFileByWidth(inputName: String, outputName: String) {
 }
 
 
-
 /**
  * Средняя (14 баллов)
  *
@@ -372,43 +371,36 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                         line.append("<p>")
                         openP = true
                     }
-                    if (lines[k][i] == '~' && i + 1 < lines[k].length && lines[k][i + 1] == '~')
-                        when (countDash) {
-                            false -> {
-                                line.append("<s>")
-                                countDash = true
-                            }
-                            true -> {
-                                line.append("</s>")
-                                countDash = false
-                            }
+                    if (lines[k][i] == '~' && i + 1 < lines[k].length && lines[k][i + 1] == '~') {
+                        if (!countDash) {
+                            line.append("<s>")
+                            countDash = true
+                        } else {
+                            line.append("</s>")
+                            countDash = false
                         }
-                    else if (lines[k][i] == '*')
+                    } else if (lines[k][i] == '*') {
                         if (i + 1 < lines[k].length && lines[k][i + 1] == '*') {
                             i += 1
-                            when (doubleStars) {
-                                false -> {
-                                    doubleStars = true
-                                    line.append("<b>")
-                                }
-                                true -> {
-                                    doubleStars = false
-                                    line.append("</b>")
-                                }
+                            if (!doubleStars) {
+                                doubleStars = true
+                                line.append("<b>")
+                            } else {
+                                doubleStars = false
+                                line.append("</b>")
                             }
                         } else
-                            when (countStars) {
-                                false -> {
-                                    countStars = true
-                                    line.append("<i>")
-                                }
-                                true -> {
-                                    countStars = false
-                                    line.append("</i>")
-                                }
+                            if (!countStars) {
+                                countStars = true
+                                line.append("<i>")
+                            } else {
+                                countStars = false
+                                line.append("</i>")
                             }
+                    }
                     if (lines[k][i] != '~' && lines[k][i] != '*') line.append(lines[k][i])
                     i++
+
                 }
             }
         }
