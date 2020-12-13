@@ -183,10 +183,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                 val k = i.size - 1
                 val n = lineMax - st.length + k
                 val a = n / k
+                val x = n - a * k
                 st = buildString {
                     for (element in 0 until k) {
                         append(i[element], " ".repeat(a))
-                        if (element < n - a * k) append(" ")
+                        if (element < x) append(" ")
                     }
                     append(i[k])
                 }
@@ -359,17 +360,17 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         var countDash = false
         var countStars = false
         var doubleStars = false
-        var openP = 1
+        var openP = true
         for (k in lines.indices) {
-            if (k != 0 && lines[k].isEmpty() && lines[k - 1].isNotEmpty() && openP == 1) {
+            if (k != 0 && lines[k].isEmpty() && lines[k - 1].isNotEmpty() && openP) {
                 line.append("</p>")
-                openP = 0
+                openP = false
             } else {
                 var i = 0
                 while (lines[k].length > i) {
-                    if (openP == 0) {
+                    if (!openP) {
                         line.append("<p>")
-                        openP = 1
+                        openP = true
                     }
                     if (lines[k][i] == '~' && i + 1 < lines[k].length && lines[k][i + 1] == '~')
                         when (countDash) {
@@ -411,7 +412,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 }
             }
         }
-        if (openP == 1) line.append("</p>")
+        if (openP) line.append("</p>")
         it.write(line.append("</body></html>").toString())
     }
 }
