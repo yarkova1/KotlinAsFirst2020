@@ -371,14 +371,16 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                         line.append("<p>")
                         openP = true
                     }
-                    if (lines[k][i] == '~' && i + 1 < lines[k].length && lines[k][i + 1] == '~') {
-                        if (!countDash) {
-                            line.append("<s>")
-                            countDash = true
-                        } else {
-                            line.append("</s>")
-                            countDash = false
-                        }
+                    if (lines[k][i] == '~' && i + 1 < lines[k].length) {
+                        if (lines[k][i + 1] == '~') {
+                            if (!countDash) {
+                                line.append("<s>")
+                                countDash = true
+                            } else {
+                                line.append("</s>")
+                                countDash = false
+                            }
+                        } else if (lines[k][i - 1] != '~' && i != 0) line.append('~')
                     } else if (lines[k][i] == '*') {
                         if (i + 1 < lines[k].length && lines[k][i + 1] == '*') {
                             i += 1
@@ -400,7 +402,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     }
                     if (lines[k][i] != '~' && lines[k][i] != '*') line.append(lines[k][i])
                     i++
-
                 }
             }
         }
