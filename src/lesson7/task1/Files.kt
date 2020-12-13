@@ -361,6 +361,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         var doubleStars = false
         var openP = true
         for (k in lines.indices) {
+            lines[k].trim()
             if (k != 0 && lines[k].isEmpty() && lines[k - 1].isNotEmpty() && openP) {
                 line.append("</p>")
                 openP = false
