@@ -596,17 +596,16 @@ fun myFun(labyrinth: String, actions: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     var a = 0 // координата х для звёздочки
     var b = 0 // координата y для звёздочки
-    var string = 0 // кол-во строк
+    var string = - 1 // кол-во строк
     File(labyrinth).readLines().forEach { line ->
         lab.add(line)
         string++
         val q = line.indexOf("*")
         if (q != -1) {
-            a = string - 1
+            a = string
             b = q
         }
     }
-    string--
     val column = lab[0].length - 1// кол-во столбов
     for (act in actions) {
         if (act == 'u') {
