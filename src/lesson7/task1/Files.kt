@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import java.lang.IllegalArgumentException
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -575,4 +576,54 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     TODO()
+}
+
+/**
+ *Дан текстовый файл, в котором схематично изображена схема прямоугольного мини-лабиринта:
+- во всех строках одинаковое количество символов
+- символ # обозначает препятствие, символ . свободное место и символ * начальное местоположение "Робота"
+
+Функция, которую нужно написать, принимает как параметры имя этого файла и строку с командами для робота
+вида "rllluddurld", где r обозначает движение вправо, l влево, u вверх и d вниз, другие команды запрещены.
+Функция должна вернуть координаты той клетки лабиринта, на которой робот окажется после выполнения команд.
+Если очередная команда требует от робота наступить на препятствие или выйти за границы лабиринта, робот просто
+остаётся на месте и переходит к следующей команде.
+ *
+ */
+
+fun myFun(labyrinth: String, actions: String, outputName: String) {
+    val lab = mutableListOf<String>()
+    val writer = File(outputName).bufferedWriter()
+    var a = 0 // координата х для звёздочки
+    var b = 0 // координата y для звёздочки
+    var string = 0 // кол-во строк
+    File(labyrinth).readLines().forEach { line ->
+        lab.add(line)
+        string++
+        val q = line.indexOf("*")
+        if (q != -1) {
+            a = string - 1
+            b = q
+        }
+    }
+    string--
+    val column = lab[0].length - 1// кол-во столбов
+    for (act in actions) {
+        if (act == 'u') {
+            if (lab[a - 1][b] != '#' && a > 0) a--
+
+        } else if (act == 'd' && a < string) {
+            if (lab[a + 1][b] != '#') a++
+
+        } else if (act == 'l' && b > 0) {
+            if (lab[a][b - 1] != '#') b--
+
+        } else if (b < column) {
+            if (lab[a][b + 1] != '#') b++
+        }
+    }
+    a++
+    b++
+    writer.write("$a; $b")
+    writer.close()
 }

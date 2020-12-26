@@ -441,4 +441,39 @@ Basic, Ruby, Swift.
 
         File("temp.txt").delete()
     }
+
+    @Test
+    fun myFun() {
+        myFun("input/myFun.txt", "l", "temp.txt")
+        assertFileContent("temp.txt", """4; 2""")
+        File("temp.txt").delete()
+
+        myFun("input/myFun.txt", "r", "temp.txt")
+        assertFileContent("temp.txt", """4; 3""")
+        File("temp.txt").delete()
+
+        myFun("input/myFun.txt", "d", "temp.txt")
+        assertFileContent("temp.txt", """5; 3""")
+        File("temp.txt").delete()
+
+        myFun("input/myFun.txt", "luuru", "temp.txt")
+        assertFileContent("temp.txt", """1; 3""")
+        File("temp.txt").delete()
+
+        myFun("input/myFun.txt", "ldrrrruul", "temp.txt")
+        assertFileContent("temp.txt", """3; 5""")
+        File("temp.txt").delete()
+
+        myFun("input/myFun.txt", "ldrrrruur", "temp.txt")
+        assertFileContent("temp.txt", """3; 6""")
+        File("temp.txt").delete()
+
+        myFun("input/myFun.txt", "lddd", "temp.txt")
+        assertFileContent("temp.txt", """6; 2""")
+        File("temp.txt").delete()
+
+        myFun("input/myFun.txt", "rrruuullldldl", "temp.txt")
+        assertFileContent("temp.txt", """6; 2""")
+        File("temp.txt").delete()
+    }
 }
